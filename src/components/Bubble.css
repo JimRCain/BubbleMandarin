@@ -1,0 +1,62 @@
+.bubble {
+  position: absolute;
+  min-width: 70px;
+  min-height: 70px;
+  background: #2a2a2a;
+  border: 2px solid #444;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  box-shadow: inset 0 0 8px rgba(255,255,255,0.05);
+  transition: transform 0.1s, box-shadow 0.1s;
+  color: #fff;
+  width: clamp(70px, 10vw, 120px);
+  height: clamp(70px, 10vw, 120px);
+}
+
+.bubble:active {
+  transform: scale(0.95);
+}
+
+.bubble-hanzi {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.bubble-pinyin {
+  font-size: clamp(0.75rem, 2.5vw, 1.125rem);
+  color: #ccc;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: visible;
+  max-width: none;
+}
+
+/* Pop animation for correct tap */
+.pop-animation {
+  animation: pop 0.2s ease-out forwards;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.6); }
+  50% { transform: scale(1.3); box-shadow: 0 0 20px 10px rgba(0, 255, 0, 0.6); }
+  100% { transform: scale(0.3); opacity: 0; }
+}
+
+/* Flash animation for wrong tap */
+.flash-wrong {
+  animation: flashWrong 0.3s ease-out !important;
+}
+
+@keyframes flashWrong {
+  0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.8); }
+  50% { box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.8); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+}

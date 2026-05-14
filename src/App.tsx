@@ -1,27 +1,41 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import React from 'react';
+import './App.css';
+import CategoryMenu from './components/CategoryMenu';
+import GameBoard from './components/GameBoard';
 
-const queryClient = new QueryClient();
+type Difficulty = 'simple' | 'medium' | 'hard';
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+interface GameSettings {
+  categories: string[];
+  difficulty: Difficulty;
+}
+
+const App: React.FC = () => {
+  const [view, setView] = React.useState<'menu' | 'game'>('menu');
+  const [settings, setSettings] = React.useState<GameSettings | null>(null);
+
+  const handleStartGame = (categories: string[], difficulty: Difficulty) => {
+    setSettings({ categories, difficulty });
+    setView('game');
+  };
+
+  const handleBackToMenu = () => {
+    setView('menu');
+    setSettings(null);
+  };
+
+  return (
+    <div className="app">
+      {view === 'menu' && <CategoryMenu onStartGame={handleStartGame} />}
+      {view === 'game' && settings && (
+        <GameBoard
+          categories={settings.categories}
+          difficulty={settings.difficulty}
+          onBackToMenu={handleBackToMenu}
+        />
+      )}
+    </div>
+  );
+};
 
 export default App;

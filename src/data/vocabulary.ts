@@ -34,6 +34,7 @@ function normalizeCategory(name: string): string {
     "Daily routines": "Daily routines",
     "Body parts": "Body parts",
     "School objects": "School objects",
+    "HSK 5": "HSK 5",
   };
   if (overrides[name]) return overrides[name];
   // Default: replace hyphens with spaces, capitalize words

@@ -150,6 +150,21 @@ export function initTTS() {
 }
 // -----------------------------------------
 
+// Weighted random selection helper
+function pickWeighted(words: WordData[], weights: Record<string, number>): WordData {
+  const weightList = words.map(w => ({
+    word: w,
+    weight: weights[w.english] ?? 2, // fresh words start at 2
+  }));
+  const totalWeight = weightList.reduce((sum, item) => sum + item.weight, 0);
+  let r = Math.random() * totalWeight;
+  for (const item of weightList) {
+    r -= item.weight;
+    if (r <= 0) return item.word;
+  }
+  return weightList[weightList.length - 1].word;
+}
+
 const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) => {
   const params = DIFFICULTY_PARAMS[difficulty];
   const [showPinyin, setShowPinyin] = useState(params.pinyinDefault);
@@ -169,6 +184,9 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
   const firstSpawnDone = useRef(false);
   const targetSetRef = useRef(false);
   const targetHanziRef = useRef<string | null>(null);
+
+  // Word weights for adaptive frequency
+  const wordWeightsRef = useRef<Record<string, number>>({});
 
   const { playCorrect, playWrong } = useGameAudio();
 
@@ -249,7 +267,13 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
     const availableWords = wordPool.filter((w) => !existingHanzi.has(w.hanzi));
     if (availableWords.length === 0) return;
 
-    const word = availableWords[Math.floor(Math.random() * availableWords.length)];
+    // Choose word using weighted selection if pool is large enough
+    let word: WordData;
+    if (wordPool.length > 20) {
+      word = pickWeighted(availableWords, wordWeightsRef.current);
+    } else {
+      word = availableWords[Math.floor(Math.random() * availableWords.length)];
+    }
 
     const newBubble: BubbleData = {
       id: nextIdRef.current++,
@@ -338,9 +362,24 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
     return () => cancelAnimationFrame(animFrameRef.current);
   }, [levelComplete, params.fallSpeedMs, getFreeSlots, slotPositions]);
 
+  // ----- Adaptive weight updates -----
+  const adjustWeight = useCallback((english: string, factor: number) => {
+    const weights = wordWeightsRef.current;
+    const current = weights[english] ?? 1;
+    const newWeight = Math.max(0.2, Math.min(5, current * factor));
+    weights[english] = newWeight;
+  }, []);
+
   const handleCorrectTap = useCallback(
     (bubbleId: number) => {
       playCorrect();
+
+      // Find the word before removing it
+      const word = bubblesRef.current.find(b => b.id === bubbleId)?.word;
+      if (word && wordPool.length > 20) {
+        adjustWeight(word.english, 0.8); // Decrease weight: show less often
+      }
+
       setBubbles((prev) => {
         const updated = prev.map((b) =>
           b.id === bubbleId ? { ...b, popping: true, flash: 'correct' as const } : b
@@ -369,12 +408,18 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
         return prev;
       });
     },
-    [params.pointsCorrect, goal, playCorrect, isEndless]
+    [params.pointsCorrect, goal, playCorrect, isEndless, wordPool.length, adjustWeight]
   );
 
   const handleWrongTap = useCallback(
     (bubbleId: number, correctHanzi: string) => {
       playWrong();
+
+      // Increase weight for the correct target word (the one user missed)
+      if (targetEnglish && wordPool.length > 20) {
+        adjustWeight(targetEnglish, 1.3); // Increase: show more often
+      }
+
       setBubbles((prev) =>
         prev.map((b) => (b.id === bubbleId ? { ...b, flash: 'wrong' as const } : b))
       );
@@ -394,7 +439,7 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
       }
       if (navigator.vibrate) navigator.vibrate(100);
     },
-    [params.penaltyWrong, playWrong]
+    [params.penaltyWrong, playWrong, targetEnglish, wordPool.length, adjustWeight]
   );
 
   const handlePop = useCallback(
@@ -428,6 +473,8 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
     targetSetRef.current = false;
     setTargetEnglish(null);
     targetHanziRef.current = null;
+    // Reset weights when continuing
+    wordWeightsRef.current = {};
     window.speechSynthesis.cancel();
     setIsEndless(true);
     setGoal(Infinity);

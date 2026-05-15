@@ -473,8 +473,7 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
     targetSetRef.current = false;
     setTargetEnglish(null);
     targetHanziRef.current = null;
-    // Reset weights when continuing
-    wordWeightsRef.current = {};
+    // Keep word weights when going to endless mode
     window.speechSynthesis.cancel();
     setIsEndless(true);
     setGoal(Infinity);

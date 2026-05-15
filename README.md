@@ -1,1 +1,1 @@
-# Welcome to your Dyad app
+# Vibe coded with Dyad and Deepseek.

@@ -1,32 +1,37 @@
 [
-  {"english":"airport","hanzi":"机场","pinyin":"jī chǎng","difficulty":"simple","category":"HSK 5"},
-  {"english":"environment","hanzi":"环境","pinyin":"huán jìng","difficulty":"simple","category":"HSK 5"},
-  {"english":"education","hanzi":"教育","pinyin":"jiào yù","difficulty":"simple","category":"HSK 5"},
-  {"english":"experience","hanzi":"经验","pinyin":"jīng yàn","difficulty":"simple","category":"HSK 5"},
-  {"english":"government","hanzi":"政府","pinyin":"zhèng fǔ","difficulty":"medium","category":"HSK 5"},
-  {"english":"international","hanzi":"国际","pinyin":"guó jì","difficulty":"medium","category":"HSK 5"},
-  {"english":"relationship","hanzi":"关系","pinyin":"guān xì","difficulty":"simple","category":"HSK 5"},
-  {"english":"professor","hanzi":"教授","pinyin":"jiào shòu","difficulty":"medium","category":"HSK 5"},
-  {"english":"volunteer","hanzi":"志愿者","pinyin":"zhì yuàn zhě","difficulty":"hard","category":"HSK 5"},
-  {"english":"interview","hanzi":"面试","pinyin":"miàn shì","difficulty":"medium","category":"HSK 5"},
-  {"english":"ability","hanzi":"能力","pinyin":"néng lì","difficulty":"medium","category":"HSK 5"},
-  {"english":"achieve","hanzi":"达到","pinyin":"dá dào","difficulty":"medium","category":"HSK 5"},
-  {"english":"adapt","hanzi":"适应","pinyin":"shì yìng","difficulty":"medium","category":"HSK 5"},
-  {"english":"balance","hanzi":"平衡","pinyin":"píng héng","difficulty":"hard","category":"HSK 5"},
-  {"english":"benefit","hanzi":"好处","pinyin":"hǎo chù","difficulty":"simple","category":"HSK 5"},
-  {"english":"communicate","hanzi":"交流","pinyin":"jiāo liú","difficulty":"medium","category":"HSK 5"},
-  {"english":"compare","hanzi":"比较","pinyin":"bǐ jiào","difficulty":"simple","category":"HSK 5"},
-  {"english":"concentrate","hanzi":"集中","pinyin":"jí zhōng","difficulty":"medium","category":"HSK 5"},
-  {"english":"confident","hanzi":"自信","pinyin":"zì xìn","difficulty":"medium","category":"HSK 5"},
-  {"english":"continue","hanzi":"继续","pinyin":"jì xù","difficulty":"simple","category":"HSK 5"},
-  {"english":"control","hanzi":"控制","pinyin":"kòng zhì","difficulty":"hard","category":"HSK 5"},
-  {"english":"dangerous","hanzi":"危险","pinyin":"wēi xiǎn","difficulty":"simple","category":"HSK 5"},
-  {"english":"decision","hanzi":"决定","pinyin":"jué dìng","difficulty":"simple","category":"HSK 5"},
-  {"english":"definitely","hanzi":"一定","pinyin":"yī dìng","difficulty":"simple","category":"HSK 5"},
-  {"english":"depend","hanzi":"靠","pinyin":"kào","difficulty":"medium","category":"HSK 5"},
-  {"english":"discover","hanzi":"发现","pinyin":"fā xiàn","difficulty":"simple","category":"HSK 5"},
-  {"english":"distinguish","hanzi":"区别","pinyin":"qū bié","difficulty":"hard","category":"HSK 5"},
-  {"english":"effect","hanzi":"效果","pinyin":"xiào guǒ","difficulty":"medium","category":"HSK 5"},
-  {"english":"encourage","hanzi":"鼓励","pinyin":"gǔ lì","difficulty":"hard","category":"HSK 5"},
-  {"english":"expect","hanzi":"期待","pinyin":"qī dài","difficulty":"medium","category":"HSK 5"}
+  {
+    "english": "airport",
+    "hanzi": "机场",
+    "pinyin": "jī chǎng",
+    "difficulty": "simple",
+    "category": "HSK 5"
+  },
+  {
+    "english": "environment",
+    "hanzi": "环境",
+    "pinyin": "huán jìng",
+    "difficulty": "simple",
+    "category": "HSK 5"
+  },
+  {
+    "english": "education",
+    "hanzi": "教育",
+    "pinyin": "jiào yù",
+    "difficulty": "simple",
+    "category": "HSK 5"
+  },
+  {
+    "english": "experience",
+    "hanzi": "经验",
+    "pinyin": "jīng yàn",
+    "difficulty": "simple",
+    "category": "HSK 5"
+  },
+  {
+    "english": "government",
+    "hanzi": "政府",
+    "pinyin": "zhèng fǔ",
+    "difficulty": "simple",
+    "category": "HSK 5"
+  }
 ]

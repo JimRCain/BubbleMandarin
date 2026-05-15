@@ -12,7 +12,6 @@ const URLs = [
   'https://raw.githubusercontent.com/clembench/HSK/master/HSK5.txt',
 ];
 
-// Fallback list of 100 words covering common HSK 5 topics
 const FALLBACK_WORDS = [
   ["爱惜","ài xī","to cherish"],
   ["安排","ān pái","to arrange"],
@@ -590,7 +589,6 @@ const FALLBACK_WORDS = [
   ["条件","tiáo jiàn","condition"],
   ["调整","tiáo zhěng","to adjust"],
   ["挑战","tiǎo zhàn","challenge"],
-  ["讨论","tǎo lùn","to discuss"],
   ["听说","tīng shuō","it is said"],
   ["停止","tíng zhǐ","to stop"],
   ["通常","tōng cháng","usually"],
@@ -742,7 +740,7 @@ const FALLBACK_WORDS = [
   ["永远","yǒng yuǎn","forever"],
   ["勇敢","yǒng gǎn","brave"],
   ["优点","yōu diǎn","advantage"],
-  "["优先","yōu xiān","priority"],
+  ["优先","yōu xiān","priority"],
   ["尤其","yóu qí","especially"],
   ["由于","yóu yú","due to"],
   ["邮电","yóu diàn","postal & telecom"],
@@ -891,7 +889,6 @@ async function tryFetch(url) {
 }
 
 async function main() {
-  // Try URLs in order
   for (const url of URLs) {
     const text = await tryFetch(url);
     if (text) {
@@ -916,7 +913,6 @@ async function main() {
     }
   }
 
-  // Fallback: write the embedded list
   const entries = FALLBACK_WORDS.map(([hanzi, pinyin, english]) => ({
     english,
     hanzi,

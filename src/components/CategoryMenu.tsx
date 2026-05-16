@@ -6,50 +6,39 @@ const GROUPS: { label: string; categories: string[] }[] = [
   {
     label: 'Nouns',
     categories: [
-      'Colors',
-      'Numbers (1‑20)',
-      'Family (immediate)',
-      'Animals (pets)',
-      'Animals (farm)',
-      'Animals (wild basic)',
-      'Fruits',
-      'Vegetables',
-      'Food (snacks/meals)',
-      'Drinks',
-      'Clothing',
-      'House / rooms',
-      'Furniture',
-      'School objects',
-      'Hobbies',
-      'Sports',
-      'Body parts',
-      'Health',
+      'Colors', 'Numbers (1‑20)', 'Family (immediate)', 'Animals (pets)',
+      'Animals (farm)', 'Animals (wild basic)', 'Fruits', 'Vegetables',
+      'Food (snacks/meals)', 'Drinks', 'Clothing', 'House / rooms', 'Furniture',
+      'School objects', 'Hobbies', 'Sports', 'Body parts', 'Health',
     ],
   },
   {
     label: 'Verbs & Routines',
     categories: [
-      'Daily routines',
-      'Movement verbs',
-      'Communication verbs',
-      'Mental verbs',
-      'Sensory verbs',
-      'Cooking & household verbs',
-      'Modal verbs',
-      'Emotion/state verbs',
+      'Daily routines', 'Movement verbs', 'Communication verbs', 'Mental verbs',
+      'Sensory verbs', 'Cooking & household verbs', 'Modal verbs', 'Emotion/state verbs',
     ],
   },
   {
     label: 'Adjectives & Emotions',
-    categories: ['Emotions', 'Size & shape', 'Opposites', 'Personality traits', 'Physical conditions', 'Nationalities & languages'],
+    categories: [
+      'Emotions', 'Size & shape', 'Opposites', 'Personality traits',
+      'Physical conditions', 'Nationalities & languages',
+    ],
   },
   {
     label: 'Time, Weather, Nature',
-    categories: ['Weather', 'Nature', 'Days of week', 'Months / seasons', 'Time expressions (relative)', 'Frequency adverbs'],
+    categories: [
+      'Weather', 'Nature', 'Days of week', 'Months / seasons',
+      'Time expressions (relative)', 'Frequency adverbs',
+    ],
   },
   {
     label: 'Social & Travel',
-    categories: ['Greetings & polite phrases', 'Transportation', 'Occupations (basic)', 'Social activities', 'Travel & directions', 'Shopping & money'],
+    categories: [
+      'Greetings & polite phrases', 'Transportation', 'Occupations (basic)',
+      'Social activities', 'Travel & directions', 'Shopping & money',
+    ],
   },
   {
     label: 'HSK',
@@ -64,13 +53,15 @@ const GROUPS: { label: string; categories: string[] }[] = [
 type Difficulty = 'simple' | 'medium' | 'hard';
 
 interface Props {
-  onStartGame: (categories: string[], difficulty: Difficulty) => void;
+  onStartGame: (categories: string[], difficulty: Difficulty, showPinyin: boolean, speakOnCorrect: boolean) => void;
 }
 
 const CategoryMenu: React.FC<Props> = ({ onStartGame }) => {
   const [expandedGroups, setExpandedGroups] = React.useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
   const [difficulty, setDifficulty] = React.useState<Difficulty>('simple');
+  const [showPinyin, setShowPinyin] = React.useState(true);
+  const [speakOnCorrect, setSpeakOnCorrect] = React.useState(false);
 
   const toggleGroup = (label: string) => {
     setExpandedGroups((prev) =>
@@ -100,7 +91,7 @@ const CategoryMenu: React.FC<Props> = ({ onStartGame }) => {
   const handleStart = () => {
     if (selectedCategories.length === 0) return;
     initTTS();
-    onStartGame(selectedCategories, difficulty);
+    onStartGame(selectedCategories, difficulty, showPinyin, speakOnCorrect);
   };
 
   return (
@@ -120,6 +111,29 @@ const CategoryMenu: React.FC<Props> = ({ onStartGame }) => {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Pinyin toggle */}
+      <div className="menu-toggle-row">
+        <label className="toggle-label">
+          <span>Show Pinyin</span>
+          <div
+            className={`toggle-switch ${showPinyin ? 'on' : ''}`}
+            onClick={() => setShowPinyin(!showPinyin)}
+          >
+            <div className="toggle-knob" />
+          </div>
+        </label>
+        {/* Voice toggle */}
+        <label className="toggle-label">
+          <span>Voice (on tap)</span>
+          <div
+            className={`toggle-switch ${speakOnCorrect ? 'on' : ''}`}
+            onClick={() => setSpeakOnCorrect(!speakOnCorrect)}
+          >
+            <div className="toggle-knob" />
+          </div>
+        </label>
       </div>
 
       <div className="start-btn-wrapper">

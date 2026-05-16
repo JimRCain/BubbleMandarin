@@ -14,6 +14,7 @@
   background: #1e1e1e;
   border-bottom: 1px solid #333;
   flex-shrink: 0;
+  gap: 8px;
 }
 
 .back-btn {
@@ -31,6 +32,12 @@
   font-weight: 700;
   color: #00e5ff;
   text-transform: capitalize;
+  text-align: center;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .replay-btn {
@@ -62,6 +69,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .score {
@@ -70,41 +78,7 @@
   font-weight: 600;
 }
 
-.pinyin-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.toggle-switch {
-  width: 40px;
-  height: 22px;
-  background: #555;
-  border-radius: 11px;
-  position: relative;
-  transition: background 0.2s;
-}
-
-.toggle-switch.on {
-  background: #ffd700;
-}
-
-.toggle-knob {
-  width: 18px;
-  height: 18px;
-  background: #fff;
-  border-radius: 50%;
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  transition: left 0.2s;
-}
-
-.toggle-switch.on .toggle-knob {
-  left: 20px;
-}
+/* Removed .pinyin-toggle styles since it's now in the menu */
 
 .game-area {
   flex: 1;
@@ -155,6 +129,7 @@
   max-width: none;
 }
 
+/* Pop animation for correct tap */
 .pop-animation {
   animation: pop 0.2s ease-out forwards;
 }
@@ -165,6 +140,7 @@
   100% { transform: translateX(-50%) scale(0.3); opacity: 0; }
 }
 
+/* Flash animation for wrong tap */
 .flash-wrong {
   animation: flashWrong 0.3s ease-out !important;
 }

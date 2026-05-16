@@ -54,6 +54,53 @@
   font-weight: 600;
 }
 
+/* Toggle row for pinyin & voice */
+.menu-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.95rem;
+}
+
+.toggle-switch {
+  width: 40px;
+  height: 22px;
+  background: #555;
+  border-radius: 11px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggle-switch.on {
+  background: #ffd700;
+}
+
+.toggle-knob {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s;
+}
+
+.toggle-switch.on .toggle-knob {
+  left: 20px;
+}
+
 .start-btn-wrapper {
   flex-shrink: 0;
   margin-bottom: 12px;

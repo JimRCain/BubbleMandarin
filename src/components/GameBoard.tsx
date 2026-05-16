@@ -28,6 +28,8 @@ interface BubbleData {
 interface Props {
   categories: string[];
   difficulty: Difficulty;
+  showPinyin: boolean;
+  speakOnCorrect: boolean;
   onBackToMenu: () => void;
 }
 
@@ -35,7 +37,6 @@ const DIFFICULTY_PARAMS: Record<Difficulty, {
   wordFilter: string[];
   maxBubbles: number;
   fallSpeedMs: number;
-  pinyinDefault: boolean;
   pointsCorrect: number;
   penaltyWrong: number;
   goal: number;
@@ -44,7 +45,6 @@ const DIFFICULTY_PARAMS: Record<Difficulty, {
     wordFilter: ['simple'],
     maxBubbles: 4,
     fallSpeedMs: 40000,
-    pinyinDefault: true,
     pointsCorrect: 10,
     penaltyWrong: 20,
     goal: 200,
@@ -53,7 +53,6 @@ const DIFFICULTY_PARAMS: Record<Difficulty, {
     wordFilter: ['simple', 'medium'],
     maxBubbles: 5,
     fallSpeedMs: 35000,
-    pinyinDefault: true,
     pointsCorrect: 20,
     penaltyWrong: 40,
     goal: 400,
@@ -62,7 +61,6 @@ const DIFFICULTY_PARAMS: Record<Difficulty, {
     wordFilter: ['simple', 'medium', 'hard'],
     maxBubbles: 6,
     fallSpeedMs: 30000,
-    pinyinDefault: true,
     pointsCorrect: 40,
     penaltyWrong: 80,
     goal: 800,
@@ -165,9 +163,9 @@ function pickWeighted(words: WordData[], weights: Record<string, number>): WordD
   return weightList[weightList.length - 1].word;
 }
 
-const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) => {
+const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakOnCorrect, onBackToMenu }) => {
   const params = DIFFICULTY_PARAMS[difficulty];
-  const [showPinyin, setShowPinyin] = useState(params.pinyinDefault);
+  const [_showPinyin, _setShowPinyin] = useState(showPinyin); // just to hold the value
   const [bubbles, setBubbles] = useState<BubbleData[]>([]);
   const [targetEnglish, setTargetEnglish] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -374,6 +372,11 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
     (bubbleId: number) => {
       playCorrect();
 
+      // Speak if voice is enabled
+      if (speakOnCorrect && targetHanziRef.current) {
+        speakHanzi(targetHanziRef.current);
+      }
+
       // Find the word before removing it
       const word = bubblesRef.current.find(b => b.id === bubbleId)?.word;
       if (word && wordPool.length > 20) {
@@ -408,7 +411,7 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
         return prev;
       });
     },
-    [params.pointsCorrect, goal, playCorrect, isEndless, wordPool.length, adjustWeight]
+    [params.pointsCorrect, goal, playCorrect, isEndless, wordPool.length, adjustWeight, speakOnCorrect]
   );
 
   const handleWrongTap = useCallback(
@@ -445,9 +448,6 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
   const handlePop = useCallback(
     (bubble: BubbleData) => {
       if (!targetEnglish) return;
-      if (targetHanziRef.current) {
-        speakHanzi(targetHanziRef.current);
-      }
       if (bubble.word.english === targetEnglish) {
         handleCorrectTap(bubble.id);
       } else {
@@ -509,15 +509,6 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, onBackToMenu }) =>
             {isEndless ? `Score: ${score}` : `Score: ${score}/${goal}`}
           </span>
         </div>
-        <label className="pinyin-toggle">
-          <span>Pinyin</span>
-          <div
-            className={`toggle-switch ${showPinyin ? 'on' : ''}`}
-            onClick={() => setShowPinyin(!showPinyin)}
-          >
-            <div className="toggle-knob" />
-          </div>
-        </label>
       </div>
 
       <div className="game-area" ref={containerRef} style={{ touchAction: 'none' }}>

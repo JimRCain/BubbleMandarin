@@ -1,3 +1,5 @@
+// ... (only the GROUPS array needs updating, but for clarity I'll rewrite the file with the change)
+
 import React from 'react';
 import './CategoryMenu.css';
 import { initTTS } from './GameBoard';
@@ -38,6 +40,7 @@ const GROUPS: { label: string; categories: string[] }[] = [
     categories: [
       'Greetings & polite phrases', 'Transportation', 'Occupations (basic)',
       'Social activities', 'Travel & directions', 'Shopping & money',
+      'Chinese license plates',
     ],
   },
   {

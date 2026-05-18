@@ -497,7 +497,8 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
         </div>
         <div className="score-area">
           <span className="score">
-            {isEndless ? `Score: ${score}` : `Score: ${score}/${goal}`}
+            Score<br />
+            {isEndless ? score : `${score}/${goal}`}
           </span>
         </div>
       </div>

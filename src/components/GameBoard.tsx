@@ -152,7 +152,7 @@ export function initTTS() {
 function pickWeighted(words: WordData[], weights: Record<string, number>): WordData {
   const weightList = words.map(w => ({
     word: w,
-    weight: weights[w.english] ?? 2, // fresh words start at 2
+    weight: weights[w.english] ?? 2,
   }));
   const totalWeight = weightList.reduce((sum, item) => sum + item.weight, 0);
   let r = Math.random() * totalWeight;
@@ -165,7 +165,6 @@ function pickWeighted(words: WordData[], weights: Record<string, number>): WordD
 
 const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakOnCorrect, onBackToMenu }) => {
   const params = DIFFICULTY_PARAMS[difficulty];
-  const [_showPinyin, _setShowPinyin] = useState(showPinyin); // just to hold the value
   const [bubbles, setBubbles] = useState<BubbleData[]>([]);
   const [targetEnglish, setTargetEnglish] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -183,7 +182,6 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
   const targetSetRef = useRef(false);
   const targetHanziRef = useRef<string | null>(null);
 
-  // Word weights for adaptive frequency
   const wordWeightsRef = useRef<Record<string, number>>({});
 
   const { playCorrect, playWrong } = useGameAudio();
@@ -265,7 +263,6 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
     const availableWords = wordPool.filter((w) => !existingHanzi.has(w.hanzi));
     if (availableWords.length === 0) return;
 
-    // Choose word using weighted selection if pool is large enough
     let word: WordData;
     if (wordPool.length > 20) {
       word = pickWeighted(availableWords, wordWeightsRef.current);
@@ -360,7 +357,6 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
     return () => cancelAnimationFrame(animFrameRef.current);
   }, [levelComplete, params.fallSpeedMs, getFreeSlots, slotPositions]);
 
-  // ----- Adaptive weight updates -----
   const adjustWeight = useCallback((english: string, factor: number) => {
     const weights = wordWeightsRef.current;
     const current = weights[english] ?? 1;
@@ -372,23 +368,20 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
     (bubbleId: number) => {
       playCorrect();
 
-      // Speak if voice is enabled
       if (speakOnCorrect && targetHanziRef.current) {
         speakHanzi(targetHanziRef.current);
       }
 
-      // Find the word before removing it
       const word = bubblesRef.current.find(b => b.id === bubbleId)?.word;
       if (word && wordPool.length > 20) {
-        adjustWeight(word.english, 0.8); // Decrease weight: show less often
+        adjustWeight(word.english, 0.8);
       }
 
-      setBubbles((prev) => {
-        const updated = prev.map((b) =>
+      setBubbles((prev) =>
+        prev.map((b) =>
           b.id === bubbleId ? { ...b, popping: true, flash: 'correct' as const } : b
-        );
-        return updated;
-      });
+        )
+      );
 
       setTimeout(() => {
         setBubbles((prev) => prev.filter((b) => b.id !== bubbleId));
@@ -418,9 +411,8 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
     (bubbleId: number, correctHanzi: string) => {
       playWrong();
 
-      // Increase weight for the correct target word (the one user missed)
       if (targetEnglish && wordPool.length > 20) {
-        adjustWeight(targetEnglish, 1.3); // Increase: show more often
+        adjustWeight(targetEnglish, 1.3);
       }
 
       setBubbles((prev) =>
@@ -473,7 +465,6 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
     targetSetRef.current = false;
     setTargetEnglish(null);
     targetHanziRef.current = null;
-    // Keep word weights when going to endless mode
     window.speechSynthesis.cancel();
     setIsEndless(true);
     setGoal(Infinity);
@@ -496,7 +487,7 @@ const GameBoard: React.FC<Props> = ({ categories, difficulty, showPinyin, speakO
         <button className="back-btn" onClick={handleBackMenu}>
           ← Menu
         </button>
-        <div className="target-word" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div className="target-word">
           <span>{targetEnglish ? targetEnglish : '...'}</span>
           {targetEnglish && (
             <button className="replay-btn" onClick={handleReplay} title="Replay pronunciation">

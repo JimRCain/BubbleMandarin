@@ -1,5 +1,3 @@
-// ... (only the GROUPS array needs updating, but for clarity I'll rewrite the file with the change)
-
 import React from 'react';
 import './CategoryMenu.css';
 import { initTTS } from './GameBoard';
